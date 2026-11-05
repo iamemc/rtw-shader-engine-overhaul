@@ -11,7 +11,7 @@ Atmospheric and sky effects for Total War: ROME REMASTERED:
 
 This add-on is independent of the RIS Battlemap add-on. It uses the same ReShade, runs beside it, and shares no code or settings with it (their settings share one overlay window, a tab each). It writes trueSKY values into the game's memory each frame and injects rendering passes for enhanced lighting and effects, leaving the game executable and original files untouched.
 
-# RIS Battlemap Features (ReShade add-on)
+# RIS Battlemap Features
 
 Battlefield effects for Total War: ROME REMASTERED:
 - **Blood on the battlefield.** Blood decals are stamped on the ground where soldiers fight, and stay for the rest of the battle.
@@ -20,3 +20,14 @@ Battlefield effects for Total War: ROME REMASTERED:
 - **Butterflies.** Butterflies, a dragonfly and a hawkmoth fly over the grass and by the trees the game draws, each species with its own size, wingbeat and flight.
 
 This add-on is independent of the RIS TrueSky add-on. It uses the same ReShade, runs beside it, and shares no code or settings with it (their settings share one overlay window, a tab each). It reads the game's draw calls and adds draws of its own. It never reads or writes game memory and never changes the exe or any game file.
+
+
+## Install
+
+1. Install **ReShade 6.8 or later, the "with full add-on support" build**, for `Total War ROME REMASTERED.exe` with the DirectX 10/11/12 API. (Skip this if the RIS TrueSky add-on is already installed.)
+2. Run `build.bat`. It needs Visual Studio 2022 Build Tools with "Desktop development with C++".
+3. Copy these three items from `build\` into the folder that holds ReShade's `dxgi.dll` (the game folder):
+   - `ris_battlemap.addon64`
+   - `ris_battlemap.ini`
+   - the `ris_battlemap\` folder (the decal textures, in `ris_battlemap\decals\`)
+4. In game, press Home, then open the **RIS** window, **Battlemap** tab (shared with the RIS TrueSky add-on's **TrueSky** tab; drag the window into the main overlay to dock it if it opens floating). Changes save to the ini by themselves, and edits to the ini are picked up while the game runs.
