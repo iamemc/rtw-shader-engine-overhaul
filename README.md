@@ -1,33 +1,63 @@
-# RIS TrueSky Features
+# RIS Shader Engine Overhaul
 
-Atmospheric and sky effects for Total War: ROME REMASTERED:
+A ReShade add-on for Total War: ROME REMASTERED that overhauls battle graphics: lighting, shadows, sky, fog, water, terrain, trees and battlefield effects.
+It was made for the RTR: Imperium Surrectum (RIS) mod and also works with the base game.
+It never changes the game's executable or any game file on disk.
 
-- **Cloud shadows on the ground.** Clouds cast accurate shadows onto terrain, units, buildings, and trees using the game's depth buffer and trueSKY's cloud volume.
-- **Physical rainbows.** Dynamic primary and secondary rainbows appear under proper rain, sun angles, and atmospheric conditions, fully occluded by terrain.
-- **Dynamic auroras.** High-altitude auroral curtains with real-time motion, multi-layer color profiles, and subtle terrain lighting render during clear winter nights.
-- **Cloud motion (wind).** TrueSKY cloud layers drift naturally over real-time using preset wind directions and speeds, preventing clouds from locking in place.
-- **Physically based sky & atmosphere.** Replaces the default flat Nishita-style scattering with a modern model featuring multiple scattering, stratospheric aerosol, and realistic sunset/twilight hues.
-- **Lightning strikes & thunder.** Storm clouds generate realistic stepped and return-stroke lightning bolts, casting dynamic flash illumination across the sky and ground, paired with positional thunder audio.
+See [CHANGELOG.md](CHANGELOG.md) for everything it adds and fixes.
 
-This add-on is independent of the RIS Battlemap add-on. It uses the same ReShade, runs beside it, and shares no code or settings with it (their settings share one overlay window, a tab each). It writes trueSKY values into the game's memory each frame and injects rendering passes for enhanced lighting and effects, leaving the game executable and original files untouched.
+## Features
 
-# RIS Battlemap Features
+The add-on has three parts, each with its own tab in the in-game window.
 
-Battlefield effects for Total War: ROME REMASTERED:
-- **Blood on the battlefield.** Blood decals are stamped on the ground where soldiers fight, and stay for the rest of the battle.
-- **Stuck arrows stay.** Arrows stuck in the ground stay for as long as you choose, instead of vanishing after the game's own time.
-- **Trees in the wind.** Battle trees sway: crowns lean and rock, leaves flutter.
-- **Butterflies.** Butterflies, a dragonfly and a hawkmoth fly over the grass and by the trees the game draws, each species with its own size, wingbeat and flight.
+**Graphics Engine**
+- Modern ambient occlusion, contact shadows and softer, sharper sun shadows.
+- Ambient light from the sky's direction, and reflections that follow each surface's roughness.
+- Sunlight through backlit leaves and grass, skin highlights and cloth sheen.
+- New tone mapping (the game's curve, AgX, ACES 2.0 or GT7), bloom, a simulated lens flare and CMAA2 anti-aliasing.
+- Terrain without visible tiling, with natural colour variation and rocky slopes.
+- Fixes for defects in the game's own shaders, such as rough surfaces too dark in reflections and skin and leaves glowing in shade.
 
-This add-on is independent of the RIS TrueSky add-on. It uses the same ReShade, runs beside it, and shares no code or settings with it (their settings share one overlay window, a tab each). It reads the game's draw calls and adds draws of its own. It never reads or writes game memory and never changes the exe or any game file.
+**TrueSky**
+- Cloud shadows on the ground, clouds that drift with the wind, and a physically based sky with realistic sunsets.
+- Height fog that follows the terrain, a low drifting mist, and sunbeams through clouds and trees.
+- Rainbows, auroras on winter nights, lightning with thunder, and starlight at night.
+- Ocean waves, and water that reflects the moving sky.
 
+**Battlemap**
+- Blood on the ground, stuck arrows and landed siege projectiles that stay, and craters where rocks land.
+- Trees, grass and capes that move in the wind.
+- Distant trees drawn as detailed impostors that look right from every angle.
+- Butterflies and other insects over the grass and around the trees.
+
+## Requirements
+
+- Total War: ROME REMASTERED (DirectX 11).
+- ReShade 6.8 or later, the build **with full add-on support**, installed for `Total War ROME REMASTERED.exe` with the DirectX 10/11/12 API.
 
 ## Install
 
-1. Install **ReShade 6.8 or later, the "with full add-on support" build**, for `Total War ROME REMASTERED.exe` with the DirectX 10/11/12 API. (Skip this if the RIS TrueSky add-on is already installed.)
-2. Run `build.bat`. It needs Visual Studio 2022 Build Tools with "Desktop development with C++".
-3. Copy these three items from `build\` into the folder that holds ReShade's `dxgi.dll` (the game folder):
-   - `ris_battlemap.addon64`
-   - `ris_battlemap.ini`
-   - the `ris_battlemap\` folder (the decal textures, in `ris_battlemap\decals\`)
-4. In game, press Home, then open the **RIS** window, **Battlemap** tab (shared with the RIS TrueSky add-on's **TrueSky** tab; drag the window into the main overlay to dock it if it opens floating). Changes save to the ini by themselves, and edits to the ini are picked up while the game runs.
+1. Install ReShade as above, if it isn't installed yet.
+2. Copy these into the game folder, next to ReShade's `dxgi.dll`:
+   - `ris.addon64`
+   - `ris_battlemap.ini`, `ris_engine.ini` and `ris_truesky.ini`
+   - the `ris_battlemap` folder (decals, impostors, insects and thunder sounds)
+3. If you used an earlier version, delete `ris_truesky.addon64`, `ris_battlemap.addon64` and `ris_engine.addon64` from the game folder.
+   Your existing `.ini` files can stay.
+
+## Use
+
+- In game, press **Home** to open ReShade, then the **RIS** window.
+- The window has a tab for each part: **Battlemap**, **Graphics Engine** and **TrueSky**.
+  If it opens floating, drag it into ReShade's main window to dock it.
+- Every feature can be switched on and off live, during a battle.
+- Changes are saved to the `.ini` files by themselves, and edits made to the files are picked up while the game runs.
+
+## Notes
+
+- Distant tree impostors cover the RIS mod's trees; with other trees the game's own distant trees are kept.
+- Some features need the game's own settings on: ambient occlusion needs the game's SSAO, and the edge smoothing features need MSAA.
+
+## Uninstall
+
+Delete `ris.addon64`, the three `.ini` files and the `ris_battlemap` folder from the game folder.

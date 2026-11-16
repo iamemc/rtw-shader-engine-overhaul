@@ -1,0 +1,169 @@
+# Changelog
+
+All notable changes to the RIS graphics add-on for Total War: ROME REMASTERED are listed here.
+Newest release first.
+Every feature can be switched on and off live from the in-game overlay (Home key, then the RIS window).
+
+## 2026-11-16
+
+Many of the new options start switched off: tick them in the in-game overlay (Home key, then the RIS window).
+Units and Buildings now have their own tabs.
+
+### Added
+
+#### Lighting and shadows
+
+- Street sky visibility: narrow streets, courtyards and gate passages get less sky light on buildings, terrain, grass and trees, and optionally on soldiers.
+- Street reflection occlusion: streets and courtyards stop reflecting the open sky.
+- Bounce light from what is on screen: sunlit plaster warms the shaded side of a street, sunlit ground lights eaves and shield undersides, and a burning roof lights the walls beside it.
+  Optional for soldiers.
+- Sun and moon bounce: light thrown back from nearby lit surfaces into shaded ones.
+- Torch and fire shadows: torches and fires no longer light through walls.
+- Sun colour: the sun's light takes trueSKY's colour for the sun through the air, orange at low sun and white at noon.
+- Specular occlusion: reflections in shade, creases and under eaves are dimmed where the surroundings would block them, on soldiers and buildings.
+- Coloured ambient occlusion on buildings.
+- Cloth sheen in the sky's light as well as the sun's: a soft rim in shade, overcast and at night.
+
+#### Soldiers and mounts
+
+- Dust, mud and blood on soldiers and mounts as real materials, placed by each soldier's own history through the battle.
+- Wet soldiers: darker and smoother after rain, drying out afterwards.
+- Snow settles on soldiers standing in it and is shed when they move.
+- Normal maps on distant soldiers, so highlights no longer jump when a soldier changes detail level.
+- Smoother edges on the cut-out parts of soldiers and mounts, and smooth fades between their detail levels.
+
+#### Buildings
+
+- Snow on buildings.
+- Wet buildings in rain: puddles and streaks.
+- Distant building highlights stop shimmering.
+
+#### Image
+
+- Rain on the lens: drops on the camera's front glass in rain, in battles only and never on the interface.
+
+#### Overlay
+
+- Units and Buildings tabs.
+- Per-pass timings in the Performance view, off until ticked.
+- Every tab's Save button writes all three `.ini` files.
+
+#### Optional corrections, all off by default
+
+- Rough surfaces keep their brightness, normal-map strength matches the game's rebuild, buildings get a correct bump direction, and the back faces of soldier parts are drawn.
+
+### Fixed
+
+- Cloud light shafts no longer jump when the camera moves.
+- A white glow some 6 degrees wide around the sun's disc.
+- Walls got far too much red ambient light at night, because ground lit by torches was counted as if the sky and moon lit it.
+- A crash when building snow was on together with the street reflection occlusion: some shaders read data they had not declared.
+- Rain on the lens was not drawn at a render scale of 100 %, even when forced: it now works with and without the upscale.
+
+## 2026-11-13
+
+The RIS TrueSky and RIS Battlemap add-ons are now a single add-on, `ris.addon64`, with a third part, the Graphics Engine.
+Your existing `.ini` settings files keep working.
+Before installing, delete the old `ris_truesky.addon64` and `ris_battlemap.addon64` from the game folder.
+
+### Added
+
+#### Lighting and shadows
+
+- New ambient occlusion: soft contact darkening under soldiers and inside formations, without dark halos behind spears and with less shimmer in the distance.
+- Contact shadows: the small shadows the game's shadow maps miss, under feet, shields, helmets, grass and rocks.
+- New sun-shadow filtering: shadow edges stay equally soft near and far, widen naturally the further they fall from what casts them, and show far less shadow acne at low sun.
+- Ambient light with a direction: surfaces facing up get the sky's light, surfaces facing down get the ground's, and creases see less of the sky.
+- Ground relief from the terrain's own normal maps, so stones stand above the moss for ambient occlusion and contact shadows.
+- Sky reflections that blur smoothly with roughness, and reflect the battlefield's ground below the horizon instead of a flat colour.
+- Sunlight through backlit leaves and grass blades.
+- Light through the thin parts of horses, camels and elephants, and through ears and fingers, adjustable from physically subtle to stylised.
+- Coloured light bounce in shaded creases of skin and pale coats.
+- Two-layer skin highlights: a sharp oily core with a soft sheen around it.
+- Cloth sheen on tunics, cloaks, boots and mounts' coats.
+- Torches and fires flicker, reach further, and can use a physically based falloff.
+
+#### Image
+
+- New tone mapping: bright colours keep their hue and roll off towards white instead of clipping, so red cloaks stay red and sunsets keep their colour.
+  Four curves to choose from: the game's own, AgX, ACES 2.0 and GT7.
+- Stable brightness when the sun enters or leaves the view.
+- New bloom: a soft glow that never pops on or off.
+  An optional FFT bloom adds glare streaks and a starburst from every bright light on screen.
+- Lens flare simulated by tracing light through a real camera lens design, with colour from its coatings and fading as trees, buildings or clouds cover the sun.
+- CMAA2 anti-aliasing in place of FXAA: smoother edges without softening textures.
+- Softer leaf and grass edges, and smooth fades between a tree and its distant version (with MSAA).
+- Clean silhouettes of units and trees against the sky, without the faint light rim.
+
+#### Terrain
+
+- No visible tiling: ground textures blend with hexagonal tiling far and near, each tile randomly rotated.
+- Broad, natural colour variation across the ground.
+- Ground layers meet along the stones' relief instead of a plain fade.
+- Steep ground turns rocky grey, ground darkens where water would run, and ridges, hollows and scree are picked out.
+- Finer lighting on the terrain beyond the battle area.
+
+#### Trees, grass and capes
+
+- Distant trees drawn as impostors baked from each tree's most detailed model: correct from every angle, including from above, and lit like the near trees.
+  Choose how many of the tree's model detail levels are drawn before the impostors take over.
+- Scrub and low woodland continue past the edge of the battle area, where the ground calls for it, instead of stopping at a hard line.
+- Grass sways with the same wind as the trees.
+- Capes move in the wind on top of their animation.
+
+#### Sky, fog and weather
+
+- Height fog that is densest at the ground, thins with height, follows the terrain, and is lit by the sun and the sky.
+- A low, drifting mist layer.
+- Sunbeams through gaps in the clouds, and through the crowns of trees.
+- Smoke, dust and other effects now fade into the fog with distance, and the game's own mist patches are lit to match the scene.
+- A physically bright sun, which no longer looks oversized in fog.
+- Starlight: the Milky Way lights clouds and fog at night, following each sky's star brightness.
+- Auroras also light the clouds.
+
+#### Water
+
+- FFT ocean waves, with calmer, shorter waves for rivers and lakes, and a new water material.
+- Smooth waves up close, and no repeating wave pattern towards the horizon.
+- Water reflects the moving sky and clouds, also for the parts of the sky off screen.
+- Clouds shade the water.
+
+#### Battlefield
+
+- Siege impacts: craters and scorch marks where onager rocks land, and landed rocks, bolts, javelins and pila stay on the ground.
+- Blood decals and butterflies with surface relief and highlights: wet blood catches the sun.
+
+### Fixed
+
+- Rough surfaces (cloth, stone, soil) were too dark in reflections.
+- Reflection blur jumped in visible steps from smooth to rough surfaces.
+- Skin and leaves glowed in shade as if in sunlight.
+- Shaded surfaces reflected the bright sky as if in full sun.
+- Torch-lit trees went dark when they switched to their distant version.
+- Small torches and fires could switch off between screen tiles.
+- A grainy pattern on distant terrain from the sky's noise, and a fine grid in night skies and auroras from the game's sharpening.
+- Gaps in water reflections, where reflected trees and walls were speckled with sky.
+- Small shadows on the riverbed or lakebed no longer show on the water's surface.
+- Sky and fog gradients no longer show banding.
+
+## 2026-11-05: Initial release
+
+Two add-ons, RIS TrueSky and RIS Battlemap, sharing one in-game window.
+
+### Added
+
+#### RIS TrueSky
+
+- Cloud shadows on the terrain, units, buildings and trees.
+- Physically placed rainbows, primary and secondary, in rain with the sun behind you.
+- Auroras on clear winter nights, with moving curtains and faint light on the terrain.
+- Clouds that drift with each sky's wind, instead of standing still for the whole battle.
+- A physically based sky and atmosphere, with realistic sunset and twilight colours.
+- Lightning in storms, with sky and ground flashes and thunder delayed by distance.
+
+#### RIS Battlemap
+
+- Blood on the ground where soldiers fight, staying for the rest of the battle.
+- Arrows stuck in the ground stay for as long as you choose.
+- Trees sway in the wind: crowns lean and rock, leaves flutter.
+- Butterflies, a dragonfly and a hawkmoth flying over the grass and around the trees.
