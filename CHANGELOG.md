@@ -4,6 +4,57 @@ All notable changes to the RIS graphics add-on for Total War: ROME REMASTERED ar
 Newest release first.
 Every feature can be switched on and off live from the in-game overlay (Home key, then the RIS window).
 
+## 2026-11-21
+
+New features now start switched on; each keeps its own checkbox, and switching one off gives the previous picture exactly.
+The RIS window has a new layout: sections on the left, a search box, and a "Layout: New / Legacy tabs" switch to go back to the old tabs.
+
+### Added
+
+#### Lighting and shadows
+
+- Lighting contract: every lit surface now combines its light by one rule, so shaded walls and undersides no longer get the ground's light twice; open ground looks the same.
+- Per-direction fallback: light the screen cannot see is filled in only from the directions it missed, giving fewer bright or dark halos near the screen edges.
+- Linear light sum: sun, sky and torch light now add up as real light does, instead of in the game's gamma space.
+  It changes the overall balance (sunlit units somewhat darker, buildings somewhat brighter), so Sun scale and Moon scale sliders come with it.
+  Untick "Linear light sum" (Lighting) for the previous picture.
+- Torch and fire shadow maps: the torches and fires that light the most of the screen get real shadow maps, so their shadows on grass are no longer blocky and roofs near a fire shade what is under them.
+  A time budget keeps the cost bounded in big sieges.
+- Terrain weather: the ground gets wet, puddled, streaked and snowed on together with the buildings, in the same frame.
+
+#### Fire
+
+- Fire light comes from the flames: a burning building's light is spread over its flames instead of sitting at its base, flames the game gave no light now get one, and the total light stays the game's.
+- A carried torch's light stays on its flame while it moves.
+- Arrow trails are lit by the scene like the mist, with no white streaks at night, and the mist's relighting has a strength slider.
+
+#### Water
+
+- Sea waves move the water surface itself near the camera, not only its shading.
+
+#### Image
+
+- At night the lens flare follows the moon instead of tracing the absent sun.
+
+### Changed
+
+- Rivers and lakes have calmer, larger waves.
+
+### Performance
+
+- Battles with over 10,000 soldiers: the soldier tracking costs about 0.5 ms instead of up to 4.2 ms.
+- No hitch of about 30 ms when the camera cuts to another place (now about 3 ms).
+- At night the sun's lens flare is no longer traced, saving about 2 ms a frame.
+
+### Fixed
+
+- Bounce light crawled and changed shape on a still camera, showed 20-pixel blocks and left red pools at night.
+- Water sparkled, crests were jagged, rivers glowed and showed a grid; the game's own water reflections are sharp again.
+- Rivers flickered between river and sea waves.
+- Light from burning buildings flooded whole compounds, and lights sat away from the flames.
+- Several crash risks when leaving a battle or loading the next one (tree detail levels, cloud layers, settings written while the game was closing).
+- The light-ring debug view of the fire lights was not drawn.
+
 ## 2026-11-16
 
 Many of the new options start switched off: tick them in the in-game overlay (Home key, then the RIS window).
