@@ -1,0 +1,359 @@
+RIS graphics add-on for Total War: ROME REMASTERED
+Detailed changelog: every change, newest release first.
+The short list of major changes is in CHANGELOG.md.
+
+============================================================
+0.0.5 (2026-11-25)
+============================================================
+
+ADDED
+
+  Lighting and shadows
+  - With cached torch shadow maps on, trees and grass now sway in torch and fire shadows instead of jumping every few frames.
+  - Up to eight more torches and fires at each spot now cast shadows (before, only the two strongest did, so a third torch lit through walls).
+  - Every soldier now shadows every torch and fire, moving torches included (before, only the few lights with a shadow map had soldier shadows).
+  - At a low sun, hills and buildings now hide the sun from the ground, soldiers and trees behind them, hundreds of metres away (Lighting and shadows, "Sun hidden by the terrain").
+
+  Buildings
+  - Near walls, steps and roofs get real depth that shifts with the view and shadows itself at low sun (Buildings, "Building parallax").
+  - Long walls stop showing their texture repeat beyond 60 m (Buildings, "Building hex tiling").
+  - Buildings gather grime in creases, wear on edges and moss or dust on sheltered ledges by climate (Buildings, "Building weathering").
+  - Masonry and roof tiles shadow their own grooves at low sun and darken in cavities (Buildings, "Building relief").
+
+  Soldiers and mounts
+  - Blood now also stains grass, bodies and rock tops, not only bare ground.
+  - Soldiers and horses show their own blood on their bodies, it dries over time, and an arrow into a rider also bloodies his horse.
+  - A pool of blood forms under each fallen soldier and horse, where the body lies.
+  - Soldiers shed their snow in slides as they march, leaving a little in the creases.
+  - Blood now lies under each dead soldier and on the ground where he fell, sprays land at once and pools spread out over 10 to 30 seconds.
+  - A "Force edge wear" slider shows soldiers' battle wear without fighting (Soldiers and mounts).
+  - Paint wears off shield rims and armour edges as soldiers fight (Units, Unit weathering, "Edge wear").
+
+  Snow
+  - Trees under snow gather it on their crowns, shake it off as falling flakes and let clumps slide off.
+  - Snow that slid off a tree lies on the ground under it, so the ground there is whiter.
+  - Trees, rocks, stumps and still vegetation take snow in snowy battles.
+  - Fire in snow has a very slim chance of starting and spreading, and fires melt the snow around them on the ground and in tree crowns.
+  - Fire melts the snow on nearby buildings' roofs and walls.
+
+  Fire
+  - Fire-arrow volleys and flaming rocks can now set fire to the trees they fly through, and fire arrows to the grass where they land, by chance and less in wet weather.
+  - Burning trees' flames now light their surroundings like the game's fires.
+  - The game's burning buildings now throw ember particles too, more rarely than burning trees.
+
+  Image
+  - Night shift: at night dim colours fade towards the blue-grey of night vision, reds darken and blues brighten, torches keep their colour (Tone mapping, "Night shift (Purkinje)").
+  - Depth of field in linear light: distant ground stays sharp until its blur reaches a pixel, bright lights keep their brightness, and no halo or ghost copies around objects (Camera tab, "Depth of field"; "Highlight limit").
+
+  Overlay
+  - The Performance tab shows the cost of each burning pass (simulation, uploads, grass, flames and smoke, embers, building soot).
+  - With Measure on, a sudden spike in any Performance row writes one line to ReShade.log naming the row and what was created that frame; slow shader patching (over 5 ms) is logged too.
+  - With Measure on, every add-on effect has its own Performance row named after its ini section, and an Unaccounted row shows the frame time nothing named explains.
+  - The Performance tab, the dump and the CSV show how many pixels, primitives and compute threads each row costs while Measure is on.
+
+CHANGED
+
+- Panel status lines say Active only when a feature really worked this frame, and Idle with the reason otherwise.
+- Snow builds up twice as fast: full cover in about 1 minute of heavy snow.
+- The Performance tab times the shadow resolve, tone map and sharpening on their own, keeps the add-on's passes apart from the game's, and its CSV places every sample in the frame it measured.
+- The panel's search matches what the panel shows, not the hover descriptions.
+- The Performance tab, dump and CSV show the Battlemap's GPU passes, the far field included.
+- The Performance tab, dump and CSV show TrueSky's GPU passes (fog, light shafts, cloud shadows and maps, water sky cube).
+- Tiling building textures (roof tiles, brick, road and stone) now get parallax, relief and snow height; before most were mistaken for atlases.
+- The Performance tab and its CSV show the whole frame's GPU time, the game's draws outside any family, and the time spent waiting inside Present.
+- Building weathering no longer paints pale blotches and mortar halos: grime sits in cracks and wear brightens edges, close up only.
+- Building textures are no longer hex-tiled; building snow is, beyond 60 m, and thick snow forms a soft rounded cap.
+- Burning buildings no longer show a glowing ember overlay; they only blacken gradually with soot, like the trees.
+- A burning tree first smoulders, glowing where it caught under thin smoke, before the flames start; its embers rise and fall with the fire, and each glowing spot and ember has its own colour from deep red to orange-yellow.
+- Blood on the ground dries over time: fresh blood is glossy, and over a few minutes of game time it turns duller, darker and browner, thin spray first; it stops while the game is paused.
+- Up to 256 blood and impact decal textures (was 32), and new scanned blood decals with their own normal and roughness maps.
+- The RIS panel's search finds every setting by its name, heading, tooltip, ini key or value, ignoring spaces and case and allowing a typo; Enable or disable everything, Save all to inis and Restore defaults on the panel's first line.
+- The tone map offers two curves, the game's own curve with colours kept and GT7; Minimal AgX and ACES 2.0 are removed.
+- Torch and fire lights follow the flames again by default.
+- A new Camera tab and page in the RIS panel; Rain on the lens moved there from the Graphics Engine tab.
+- Burning trees have steadier, slower and smaller flames and steadier, slower smoke, with no popping.
+- A burning tree can now go out part-way, keeping its partial burn into embers, instead of always burning to the end.
+- Sun highlights became "PBR sun and moon highlights": one checkbox, the highlight follows the sun or the moon at its real strength.
+- Fire lights no longer follow the flames by default.
+- The night shift has one slider ("Night shift") in place of strength and threshold, set to where it started before.
+
+PERFORMANCE
+
+- Wall collapses cause a smaller spike: the bounce light around damaged buildings is recomputed over a few more frames instead of at once.
+- Features you switch off no longer cost anything in the game's shaders (Terrain weather off makes the terrain shaders about 20 % shorter); switching one back on rebuilds the shaders in about a second. The Performance tab lists each feature's shader cost.
+- After a battle the add-on lets go of the game's battle objects it still held, and with the add-on switched off the tree impostors (about 100 to 120 MB) are freed too.
+- Battles with many torches and fires use far less CPU for their lights: about 2.8 ms instead of 20 ms at 1,000 lights.
+- Changing a setting in the panel no longer causes a stutter when it saves: each ini is written once instead of once per setting.
+- About 350 MB of video memory (790 MB at 4K) used by battle-only screen effects is freed when a battle ends.
+- Torch shadows at night cost less GPU time for the same picture.
+- Torch shadow maps free about 768 MB of video memory at the end of each battle, so day battles no longer hold them.
+- Torch and fire shadows check only the mapped lights that reach each part of the screen, the same picture at a fraction of the cost with many fires.
+- The bounce light frees about 400 MB of video memory after 10 s unused, such as on the campaign map.
+- On maps without water the reflection cube for water refreshes one face a frame, and the rainbow is only prepared in rain.
+- The fog's distant-ground estimate runs in parallel on the GPU instead of on one thread.
+- At night TrueSky skips the light shafts, tree shafts, far cloud map and fog sun share the shaders already discard.
+- The tree impostors re-read every 2 s without copying or starting a thread, and three per-frame readbacks share one.
+- The ground height map is copied only when new terrain is drawn, not once a second.
+- TrueSky draws only the part of the cloud map this frame's view can read (MapViewOnly=1).
+- Turning the add-on off and on in battle no longer stutters while the tree impostors reload; they stay loaded and load in the background.
+- The terrain height field no longer causes a hitch when a battle starts; it is built over about 16 frames instead of one.
+- Torch and fire shadows keep their cost within a budget in big fires, and soldier capsule shadows reach their full distance again.
+- Building, terrain and soldier wetness skip their work in dry battles.
+
+FIXED
+
+- In big night battles with many torches, burning buildings and fires no longer go unlit, and fire lights no longer drop out when the GPU falls a frame behind.
+- Snow particles (falling flakes from trees) now run without burning trees switched on.
+- On moonless nights, metal and wet surfaces in shade no longer have their reflections dimmed by the shadow of a sun or moon that isn't there.
+- Reloading ReShade while the terrain height field is building can no longer crash the game.
+- Far trees' shadows no longer wobble in the wind as if they were next to the camera; their flutter fades with distance like the trees themselves.
+- A failed build of the terrain height field or the foliage light no longer retries every frame; the panel says why and when it tries again.
+- The far field has a tree budget for extreme maps and says when it is off, instead of drawing nothing silently.
+- Another program's graphics device closing no longer drops the add-on's work on the game's device.
+- Cloud shadows get their cloud map with Lightning off (about 3 times cheaper), and a new battle no longer starts with the last battle's map position.
+- The Performance tab no longer shows passes that did nothing as run with a cost.
+- A burning tree beside a column of torch-bearers keeps its own firelight.
+- The Performance tab shows the full cost of passes that run several times a frame (torch and fire shadow maps, MSAA resolve), and the add-on GPU total counts every run.
+- Siege rocks in flight no longer leave lines of craters on the ground under their path.
+- Gilded armour in shade no longer shines as if sunlit, and sun highlights with the linear light sum are no longer blown out.
+- Rocks no longer catch fire, and a collapsing wall no longer counts as a flaming missile.
+- Soot survives turning it off and on and spreads to nearby buildings and streets; burnt ground is charcoal grey with pale ash and burnt grass turns to straw, not black.
+- The blood debug views show crater, bolt and burnt-mark decals in their own colours.
+- Building parallax can no longer be switched off by an empty fade range.
+- Capes and banners now freeze while the game is paused; the wind differs from battle to battle; marching torch columns are no longer mistaken for fire arrows; ember showers no longer stall as a fire dies down; smouldering trees no longer take flame budget from visible fires; fire arrows also count the trees on their first stretch of flight.
+- Burning trees light their surroundings as brightly again as before their flames were made smaller.
+- Blood decals: a large blood set can no longer push out the crater and burnt-mark decals, rough blood no longer turns glossier as it dries, and the dryness debug view shows impact decals correctly.
+- Snow settling on the ground no longer shows a repeating pattern; your own snow textures can replace it (ris_battlemap/unit_grunge/snow.dds, with optional normal and roughness maps).
+- Banner torches no longer set trees alight, and torches and fire arrows at the ground can now light grass.
+- Pausing a battle now stops the flames, smoke, embers, foliage burn and the sway of trees and grass.
+- Soot now shows within seconds on the walls of burning buildings, spreading up to 8 m from the fire.
+- Charging chariots no longer leave their carts behind on the field.
+- At night a high moon no longer glows like the sun in fog, and moonlight no longer takes the sun's colour.
+- Burning buildings' light no longer jumps between buildings or flickers with the flames; it stays spread over each fire and breathes with it.
+- The shadows torches cast from trees and grass now sway with the wind, as the sun's shadows do.
+- Torch and fire shadows changed shape and direction from frame to frame with a still camera; they now hold still, and a light gaining or losing its shadow map fades instead of switching.
+- A burning building's light collapsed into one white-hot spot for a frame at a time, whenever a torch or other light went out.
+- At night the linear light sum used the sun's scale even under the moon, so the Moon scale slider did nothing.
+
+============================================================
+0.0.4 (2026-11-21)
+============================================================
+
+New features now start switched on; each keeps its own checkbox, and switching one off gives the previous picture exactly.
+The RIS window has a new layout: sections on the left, a search box, and a "Layout: New / Legacy tabs" switch to go back to the old tabs.
+
+ADDED
+
+  Lighting and shadows
+
+- Lighting contract: every lit surface now combines its light by one rule, so shaded walls and undersides no longer get the ground's light twice; open ground looks the same.
+- Per-direction fallback: light the screen cannot see is filled in only from the directions it missed, giving fewer bright or dark halos near the screen edges.
+- Linear light sum: sun, sky and torch light now add up as real light does, instead of in the game's gamma space.
+  It changes the overall balance (sunlit units somewhat darker, buildings somewhat brighter), so Sun scale and Moon scale sliders come with it.
+  Untick "Linear light sum" (Lighting) for the previous picture.
+- Torch and fire shadow maps: the torches and fires that light the most of the screen get real shadow maps, so their shadows on grass are no longer blocky and roofs near a fire shade what is under them.
+  A time budget keeps the cost bounded in big sieges.
+- Terrain weather: the ground gets wet, puddled, streaked and snowed on together with the buildings, in the same frame.
+
+  Fire
+
+- Fire light comes from the flames: a burning building's light is spread over its flames instead of sitting at its base, flames the game gave no light now get one, and the total light stays the game's.
+- A carried torch's light stays on its flame while it moves.
+- Arrow trails are lit by the scene like the mist, with no white streaks at night, and the mist's relighting has a strength slider.
+
+  Water
+
+- Sea waves move the water surface itself near the camera, not only its shading.
+
+  Image
+
+- At night the lens flare follows the moon instead of tracing the absent sun.
+
+CHANGED
+
+- Rivers and lakes have calmer, larger waves.
+
+PERFORMANCE
+
+- Battles with over 10,000 soldiers: the soldier tracking costs about 0.5 ms instead of up to 4.2 ms.
+- No hitch of about 30 ms when the camera cuts to another place (now about 3 ms).
+- At night the sun's lens flare is no longer traced, saving about 2 ms a frame.
+
+FIXED
+
+- Bounce light crawled and changed shape on a still camera, showed 20-pixel blocks and left red pools at night.
+- Water sparkled, crests were jagged, rivers glowed and showed a grid; the game's own water reflections are sharp again.
+- Rivers flickered between river and sea waves.
+- Light from burning buildings flooded whole compounds, and lights sat away from the flames.
+- Several crash risks when leaving a battle or loading the next one (tree detail levels, cloud layers, settings written while the game was closing).
+- The light-ring debug view of the fire lights was not drawn.
+
+============================================================
+0.0.3 (2026-11-16)
+============================================================
+
+Many of the new options start switched off: tick them in the in-game overlay (Home key, then the RIS window).
+Units and Buildings now have their own tabs.
+
+ADDED
+
+  Lighting and shadows
+
+- Street sky visibility: narrow streets, courtyards and gate passages get less sky light on buildings, terrain, grass and trees, and optionally on soldiers.
+- Street reflection occlusion: streets and courtyards stop reflecting the open sky.
+- Bounce light from what is on screen: sunlit plaster warms the shaded side of a street, sunlit ground lights eaves and shield undersides, and a burning roof lights the walls beside it.
+  Optional for soldiers.
+- Sun and moon bounce: light thrown back from nearby lit surfaces into shaded ones.
+- Torch and fire shadows: torches and fires no longer light through walls.
+- Sun colour: the sun's light takes trueSKY's colour for the sun through the air, orange at low sun and white at noon.
+- Specular occlusion: reflections in shade, creases and under eaves are dimmed where the surroundings would block them, on soldiers and buildings.
+- Coloured ambient occlusion on buildings.
+- Cloth sheen in the sky's light as well as the sun's: a soft rim in shade, overcast and at night.
+
+  Soldiers and mounts
+
+- Dust, mud and blood on soldiers and mounts as real materials, placed by each soldier's own history through the battle.
+- Wet soldiers: darker and smoother after rain, drying out afterwards.
+- Snow settles on soldiers standing in it and is shed when they move.
+- Normal maps on distant soldiers, so highlights no longer jump when a soldier changes detail level.
+- Smoother edges on the cut-out parts of soldiers and mounts, and smooth fades between their detail levels.
+
+  Buildings
+
+- Snow on buildings.
+- Wet buildings in rain: puddles and streaks.
+- Distant building highlights stop shimmering.
+
+  Image
+
+- Rain on the lens: drops on the camera's front glass in rain, in battles only and never on the interface.
+
+  Overlay
+
+- Units and Buildings tabs.
+- Per-pass timings in the Performance view, off until ticked.
+- Every tab's Save button writes all three .ini files.
+
+  Optional corrections, all off by default
+
+- Rough surfaces keep their brightness, normal-map strength matches the game's rebuild, buildings get a correct bump direction, and the back faces of soldier parts are drawn.
+
+FIXED
+
+- Cloud light shafts no longer jump when the camera moves.
+- A white glow some 6 degrees wide around the sun's disc.
+- Walls got far too much red ambient light at night, because ground lit by torches was counted as if the sky and moon lit it.
+- A crash when building snow was on together with the street reflection occlusion: some shaders read data they had not declared.
+- Rain on the lens was not drawn at a render scale of 100 %, even when forced: it now works with and without the upscale.
+
+============================================================
+0.0.2 (2026-11-13)
+============================================================
+
+The RIS TrueSky and RIS Battlemap add-ons are now a single add-on, ris.addon64, with a third part, the Graphics Engine.
+Your existing .ini settings files keep working.
+Before installing, delete the old ris_truesky.addon64 and ris_battlemap.addon64 from the game folder.
+
+ADDED
+
+  Lighting and shadows
+
+- New ambient occlusion: soft contact darkening under soldiers and inside formations, without dark halos behind spears and with less shimmer in the distance.
+- Contact shadows: the small shadows the game's shadow maps miss, under feet, shields, helmets, grass and rocks.
+- New sun-shadow filtering: shadow edges stay equally soft near and far, widen naturally the further they fall from what casts them, and show far less shadow acne at low sun.
+- Ambient light with a direction: surfaces facing up get the sky's light, surfaces facing down get the ground's, and creases see less of the sky.
+- Ground relief from the terrain's own normal maps, so stones stand above the moss for ambient occlusion and contact shadows.
+- Sky reflections that blur smoothly with roughness, and reflect the battlefield's ground below the horizon instead of a flat colour.
+- Sunlight through backlit leaves and grass blades.
+- Light through the thin parts of horses, camels and elephants, and through ears and fingers, adjustable from physically subtle to stylised.
+- Coloured light bounce in shaded creases of skin and pale coats.
+- Two-layer skin highlights: a sharp oily core with a soft sheen around it.
+- Cloth sheen on tunics, cloaks, boots and mounts' coats.
+- Torches and fires flicker, reach further, and can use a physically based falloff.
+
+  Image
+
+- New tone mapping: bright colours keep their hue and roll off towards white instead of clipping, so red cloaks stay red and sunsets keep their colour.
+  Four curves to choose from: the game's own, AgX, ACES 2.0 and GT7.
+- Stable brightness when the sun enters or leaves the view.
+- New bloom: a soft glow that never pops on or off.
+  An optional FFT bloom adds glare streaks and a starburst from every bright light on screen.
+- Lens flare simulated by tracing light through a real camera lens design, with colour from its coatings and fading as trees, buildings or clouds cover the sun.
+- CMAA2 anti-aliasing in place of FXAA: smoother edges without softening textures.
+- Softer leaf and grass edges, and smooth fades between a tree and its distant version (with MSAA).
+- Clean silhouettes of units and trees against the sky, without the faint light rim.
+
+  Terrain
+
+- No visible tiling: ground textures blend with hexagonal tiling far and near, each tile randomly rotated.
+- Broad, natural colour variation across the ground.
+- Ground layers meet along the stones' relief instead of a plain fade.
+- Steep ground turns rocky grey, ground darkens where water would run, and ridges, hollows and scree are picked out.
+- Finer lighting on the terrain beyond the battle area.
+
+  Trees, grass and capes
+
+- Distant trees drawn as impostors baked from each tree's most detailed model: correct from every angle, including from above, and lit like the near trees.
+  Choose how many of the tree's model detail levels are drawn before the impostors take over.
+- Scrub and low woodland continue past the edge of the battle area, where the ground calls for it, instead of stopping at a hard line.
+- Grass sways with the same wind as the trees.
+- Capes move in the wind on top of their animation.
+
+  Sky, fog and weather
+
+- Height fog that is densest at the ground, thins with height, follows the terrain, and is lit by the sun and the sky.
+- A low, drifting mist layer.
+- Sunbeams through gaps in the clouds, and through the crowns of trees.
+- Smoke, dust and other effects now fade into the fog with distance, and the game's own mist patches are lit to match the scene.
+- A physically bright sun, which no longer looks oversized in fog.
+- Starlight: the Milky Way lights clouds and fog at night, following each sky's star brightness.
+- Auroras also light the clouds.
+
+  Water
+
+- FFT ocean waves, with calmer, shorter waves for rivers and lakes, and a new water material.
+- Smooth waves up close, and no repeating wave pattern towards the horizon.
+- Water reflects the moving sky and clouds, also for the parts of the sky off screen.
+- Clouds shade the water.
+
+  Battlefield
+
+- Siege impacts: craters and scorch marks where onager rocks land, and landed rocks, bolts, javelins and pila stay on the ground.
+- Blood decals and butterflies with surface relief and highlights: wet blood catches the sun.
+
+FIXED
+
+- Rough surfaces (cloth, stone, soil) were too dark in reflections.
+- Reflection blur jumped in visible steps from smooth to rough surfaces.
+- Skin and leaves glowed in shade as if in sunlight.
+- Shaded surfaces reflected the bright sky as if in full sun.
+- Torch-lit trees went dark when they switched to their distant version.
+- Small torches and fires could switch off between screen tiles.
+- A grainy pattern on distant terrain from the sky's noise, and a fine grid in night skies and auroras from the game's sharpening.
+- Gaps in water reflections, where reflected trees and walls were speckled with sky.
+- Small shadows on the riverbed or lakebed no longer show on the water's surface.
+- Sky and fog gradients no longer show banding.
+
+============================================================
+0.0.1 (2026-11-05): Initial release
+============================================================
+
+Two add-ons, RIS TrueSky and RIS Battlemap, sharing one in-game window.
+
+ADDED
+
+  RIS TrueSky
+
+- Cloud shadows on the terrain, units, buildings and trees.
+- Physically placed rainbows, primary and secondary, in rain with the sun behind you.
+- Auroras on clear winter nights, with moving curtains and faint light on the terrain.
+- Clouds that drift with each sky's wind, instead of standing still for the whole battle.
+- A physically based sky and atmosphere, with realistic sunset and twilight colours.
+- Lightning in storms, with sky and ground flashes and thunder delayed by distance.
+
+  RIS Battlemap
+
+- Blood on the ground where soldiers fight, staying for the rest of the battle.
+- Arrows stuck in the ground stay for as long as you choose.
+- Trees sway in the wind: crowns lean and rock, leaves flutter.
+- Butterflies, a dragonfly and a hawkmoth flying over the grass and around the trees.
